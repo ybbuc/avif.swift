@@ -153,41 +153,7 @@ static void releaseSharedPixels(unsigned char * pixels) {
         }
     }
         
-    std::time_t currentTime = std::time(nullptr);
-    std::tm* timeInfo = std::localtime(&currentTime);
-    
-    char formattedTime[66];
-    std::strftime(formattedTime, sizeof(formattedTime), "%Y:%m:%d %H:%M:%S", timeInfo);
-    std::string dateTime(formattedTime);
-    
-    std::string xmpMetadata = "<?xpacket begin='﻿' id='W5M0MpCehiHzreSzNTczkc9d'?>"
-    "<x:xmpmeta xmlns:x='adobe:ns:meta/' x:xmptk='XMP Core 5.5.0'>"
-    "<rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'>"
-    "<rdf:Description rdf:about='' xmlns:dc='http://purl.org/dc/elements/1.1/'>"
-    "<dc:title>Generated image by avif.swift</dc:title>"
-    "<dc:creator>avif.swift</dc:creator>"
-    "<dc:description>A image was created by avif.swift (https://github.com/awxkee/avif.swift)</dc:description>"
-    "<dc:date>" + dateTime + "</dc:date>\n"
-    "<dc:publisher>https://github.com/awxkee/avif.swift</dc:publisher>"
-    "<dc:format>AVIF</dc:format>"
-    "</rdf:Description>"
-    "<rdf:Description rdf:about='' xmlns:exif='http://ns.adobe.com/exif/1.0/'>\n"
-    "<exif:ColorSpace>sRGB</exif:ColorSpace>\n"
-    "<exif:ColorProfile>sRGB IEC61966-2.1</exif:ColorProfile>\n"
-    "</rdf:Description>\n"
-    "<rdf:Description rdf:about='' xmlns:xmp='http://ns.adobe.com/xap/1.0/'>\n"
-    "<xmp:CreatorTool>avif.swift (https://github.com/awxkee/avif.swift)</xmp:CreatorTool>\n"
-    "<xmp:ModifyDate>" + dateTime + "</xmp:ModifyDate>\n"
-    "</rdf:Description>\n"
-    "</rdf:RDF>"
-    "</x:xmpmeta>"
-    "<?xpacket end='w'?>";
-    
-    auto exifResult = avifImageSetMetadataXMP(image.get(), reinterpret_cast<const uint8_t*>(xmpMetadata.data()), xmpMetadata.size());
-    if (exifResult != AVIF_RESULT_OK) {
-        *error = [[NSError alloc] initWithDomain:@"AVIFEncoder" code:500 userInfo:@{ NSLocalizedDescriptionKey: [NSString stringWithFormat: @"Add EXIF failed with result: %s", avifResultToString(exifResult)] }];
-        return nil;
-    }
+    // XMP metadata removed - no promotional branding
     
     auto enc = avifEncoderCreate();
     if (!enc) {
